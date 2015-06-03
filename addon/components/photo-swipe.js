@@ -3,22 +3,29 @@
 
 import Em from 'ember';
 
-var run = Em.run;
+const computed = Em.computed;
+const run = Em.run;
 
 export default Em.Component.extend({
+  // layoutPropertyName: computed(function(){
+  //   if (this.get('template')) {
+  //     return 'tem'
+  //   }
+  // }), 
+  items: [],
 
   onInsert: Em.on('didInsertElement', function() {
 
-    this.set('pswpEl', this.$('.pswp')[0]);
-    this.set('pswpTheme', PhotoSwipeUI_Default);
+    // this.set('pswpEl', this.$('.pswp')[0]);
+    // this.set('pswpTheme', PhotoSwipeUI_Default);
 
-    this._buildOptions();
+    // this._buildOptions();
 
     // when passing an array of items, we don't need a block
-    if (this.get('items')) {
+    if (!Ember.isEmpty(this.get('content'))) {
       return this._initItemGallery();
     }
-    return this._calculateItems();
+    // return this._calculateItems();
   }),
 
   _buildOptions: function(getThumbBoundsFn) {
@@ -31,15 +38,18 @@ export default Em.Component.extend({
     }
 
     var options = Em.merge(reqOpts, this.get('options') || {});
-    this.set('options', options);
+    return options;
+    // this.set('options', options);
   },
 
   _initItemGallery: function() {
+    let pswpEl = this.$('.pswp')[0];
+    let pswpTheme = PhotoSwipeUI_Default;
     this.set('gallery', new PhotoSwipe(
-      this.get('pswpEl'),
-      this.get('pswpTheme'),
+      pswpEl,
+      pswpTheme,
       this.get('items'),
-      this.get('options')
+      this._buildOptions()
     ));
     this._reInitOnClose();
   },
@@ -53,28 +63,28 @@ export default Em.Component.extend({
     });
   },
 
-  click: function(evt) {
+  // click: function(evt) {
 
-    var aElement = this.$(evt.target).parent();
-    var index    = this.$("a.photo-item").index( aElement );
+  //   var aElement = this.$(evt.target).parent();
+  //   var index    = this.$("a.photo-item").index( aElement );
 
-    if (Em.isEmpty(this.get('template')) || !aElement.is('a')) { return; }
+  //   if (Em.isEmpty(this.get('layout')) || !aElement.is('a')) { return; }
 
-    evt.preventDefault();
+  //   evt.preventDefault();
 
-    // setup options, such as index for index
-    this._buildOptions(this._getBounds.bind(this));
-    this.set('options.index', index);
+  //   // setup options, such as index for index
+  //   this._buildOptions(this._getBounds.bind(this));
+  //   this.set('options.index', index);
 
-    var pSwipe = new PhotoSwipe(
-      this.get('pswpEl'),
-      this.get('pswpTheme'),
-      this.get('calculatedItems'),
-      this.get('options')
-    );
-    this.set('gallery', pSwipe);
-    this.get('gallery').init();
-  },
+  //   var pSwipe = new PhotoSwipe(
+  //     this.get('pswpEl'),
+  //     this.get('pswpTheme'),
+  //     this.get('calculatedItems'),
+  //     this.get('options')
+  //   );
+  //   this.set('gallery', pSwipe);
+  //   this.get('gallery').init();
+  // },
 
   _getBounds: function(i) {
     var img      = this.$('img').get(i),
@@ -83,17 +93,17 @@ export default Em.Component.extend({
     return {x: position.left, y: position.top, w: width};
   },
 
-  _calculateItems: function() {
-    var items           = this.$().find('a');
-    var calculatedItems = Em.A(items).map(function(i, item) {
-      return {
-        src:   Em.$(item).attr('href'),
-        w:     Em.$(item).data('width'),
-        h:     Em.$(item).data('height'),
-        msrc:  Em.$(item).children('img').attr('src'),
-        title: Em.$(item).children('img').attr('alt')
-      };
-    });
-    this.set('calculatedItems', calculatedItems);
-  }
+  // _calculateItems: function() {
+  //   var items           = this.$().find('a');
+  //   var calculatedItems = Em.A(items).map(function(i, item) {
+  //     return {
+  //       src:   Em.$(item).attr('href'),
+  //       w:     Em.$(item).data('width'),
+  //       h:     Em.$(item).data('height'),
+  //       msrc:  Em.$(item).children('img').attr('src'),
+  //       title: Em.$(item).children('img').attr('alt')
+  //     };
+  //   });
+  //   this.set('calculatedItems', calculatedItems);
+  // }
 });

@@ -3,7 +3,7 @@
 <!-- example 1 -->
 <button class="btn" {{action 'initGallery'}}>Open PhotoSwipe</button>
 
-{{photo-swipe gallery=myGallery options=psOpts items=items}}
+{{photo-swipe gallery=myGallery options=psOpts content=items}}
 
 <br>
 
@@ -13,9 +13,9 @@
 {{#photo-swipe options=psTwoOpts}}
 
   {{#each img in model}}
-    <a {{bind-attr href="img.href" data-width="img.width"
-      data-height="img.height"}}>
-      <img class="thumb" {{bind-attr src="img.href" alt="img.alt"}}>
+    <a href={{img.href}} data-width={{img.width}}
+        data-height={{img.height}}>
+    <img class="thumb" src={{img.href}} alt={{img.alt}}>
     </a>
   {{/each}}
 
