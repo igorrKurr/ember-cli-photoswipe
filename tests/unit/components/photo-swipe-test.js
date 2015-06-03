@@ -4,39 +4,39 @@ import {
   test
 } from 'ember-qunit';
 
-moduleForComponent('photo-swipe', 'PhotoSwipeComponent');
+moduleForComponent('photo-swipe');
 
-test('it renders', function() {
-  expect(2);
+test('it renders', function(assert) {
+  assert.expect(2);
 
   // creates the component instance
   var component = this.subject();
-  equal(component._state, 'preRender');
+  assert.equal(component._state, 'preRender');
 
-  // appends the component to the page
-  this.append();
-  equal(component._state, 'inDOM');
+  // render the component to the page
+  this.render();
+  assert.equal(component._state, 'inDOM');
 });
 
-test('it renders the photoswipe template', function() {
-  expect(1);
-  this.append();
+test('it renders the photoswipe template', function(assert) {
+  assert.expect(1);
+  this.render();
   var component = this.subject();
   var photoswipe = component.$('.pswp');
 
-  equal(photoswipe[0], component.get('pswpEl'));
+  assert.equal(photoswipe[0], component.get('pswpEl'));
 });
 
-test('the gallery attribute should be empty on insert.', function() {
-  expect(1);
-  this.append();
+test('the gallery attribute should be empty on insert.', function(assert) {
+  assert.expect(1);
+  this.render();
   var component = this.subject();
 
-  equal(component.get('gallery'), undefined, 'should not be set yet.');
+  assert.equal(component.get('gallery'), undefined, 'should not be set yet.');
 });
 
-test('the gallery attribute should be set when you pass items', function() {
-  expect(2);
+test('the gallery attribute should be set when you pass items', function(assert) {
+  assert.expect(2);
   var component = this.subject();
   component.set('items', [
     {
@@ -51,7 +51,7 @@ test('the gallery attribute should be set when you pass items', function() {
       h: 900
     }
   ]);
-  this.append();
-  ok(component.get('gallery'));
-  equal(typeof component.get('gallery'), 'object');
+  this.render();
+  assert.ok(component.get('gallery'));
+  assert.equal(typeof component.get('gallery'), 'object');
 });
