@@ -24,6 +24,9 @@ export default Ember.Controller.extend({
   actions: {
     initGallery: function() {
       this.get('myGallery').init();
+    },
+    toggleImage: function(number) {
+      console.log("CNCNNCCNNCN", number)
     }
   },
 

@@ -3,7 +3,6 @@
 
 import Em from 'ember';
 
-const computed = Em.computed;
 const run = Em.run;
 
 export default Em.Component.extend({
@@ -22,8 +21,17 @@ export default Em.Component.extend({
     // this._buildOptions();
 
     // when passing an array of items, we don't need a block
-    if (!Ember.isEmpty(this.get('content'))) {
-      return this._initItemGallery();
+    // if (!Em.isEmpty(this.get('content'))) {
+    //   return this._initItemGallery();
+    // }
+    var _this = this; 
+    if (this.get('content') && !Ember.isEmpty(this.get('content'))) {
+       return this._initItemGallery(this.get('content'));
+    }
+    else {
+      Em.RSVP.all(this.get('items')).then(function(items){
+        _this._initItemGallery(items); 
+      });
     }
     // return this._calculateItems();
   }),
@@ -42,25 +50,34 @@ export default Em.Component.extend({
     // this.set('options', options);
   },
 
-  _initItemGallery: function() {
+  _initItemGallery: function(items) {
     let pswpEl = this.$('.pswp')[0];
     let pswpTheme = PhotoSwipeUI_Default;
     this.set('gallery', new PhotoSwipe(
       pswpEl,
       pswpTheme,
-      this.get('items'),
+      items,
       this._buildOptions()
     ));
-    this._reInitOnClose();
+    this._reInitOnClose(items);
   },
 
-  _reInitOnClose: function() {
+  _reInitOnClose: function(items) {
     var component = this;
     this.get('gallery').listen('close', function() {
       run.next(function() {
-        component._initItemGallery();
+        component._initItemGallery(items);
       });
     });
+  },
+
+  actions: {
+    toggleImage: function(number) {
+      console.log('POOXOOXOXX', number)
+        this.get('gallery').init();
+      this.get('gallery').goTo(number);
+      return false;
+    }
   },
 
   // click: function(evt) {

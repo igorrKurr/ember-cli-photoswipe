@@ -10,13 +10,10 @@
 <!-- example 2 -->
 <h3>Example when passing a block</h3>
 
-{{#photo-swipe options=psTwoOpts}}
-
-  {{#each img in model}}
-    <a href={{img.href}} data-width={{img.width}}
-        data-height={{img.height}}>
-    <img class="thumb" src={{img.href}} alt={{img.alt}}>
-    </a>
+{{#photo-swipe options=psTwoOpts as |gallery|}}
+  {{#each model as |img index|}}
+    {{#photoswipe-item src=img.href title=img.alt gallery=gallery number=index action='toggleImage'}}
+      <img class="thumb" src={{img.href}} alt={{img.alt}}>
+    {{/photoswipe-item}}
   {{/each}}
-
 {{/photo-swipe}}
