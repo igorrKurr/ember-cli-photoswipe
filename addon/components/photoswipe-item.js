@@ -20,22 +20,24 @@ export default Ember.Component.extend({
     return this.get('_style').htmlSafe();
   }),
 
-  setup: on('init', function() {
-    let _this = this;
-    let tmpImg = new Image();
-    tmpImg.src = this.get('src');
-    var promise =  new RSVP.Promise(function(resolve){
-      $(tmpImg).one('load', function() {
-        resolve({
-          w: tmpImg.width,
-          h: tmpImg.height,
-          src: _this.get('src'),
-          title: _this.get('title'),
+  setup: on('init', Ember.observer('gallery', 'src', function() {
+    if(this.get('gallery') && this.get('src')) {
+      let _this = this;
+      let tmpImg = new Image();
+      tmpImg.src = this.get('src');
+      var promise =  new RSVP.Promise(function(resolve){
+        $(tmpImg).one('load', function() {
+          resolve({
+            w: tmpImg.width,
+            h: tmpImg.height,
+            src: _this.get('src'),
+            title: _this.get('title'),
+          });
         });
       });
-    });
-    this.get('gallery.items').push(promise);
-  }),
+      this.get('gallery.items').push(promise);
+    }
+  })),
 
   click: function(e) {
     e.preventDefault();
