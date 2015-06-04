@@ -4,7 +4,6 @@ const computed = Ember.computed;
 const $ = Ember.$;
 const on = Ember.on;
 const RSVP = Ember.RSVP;
-const observer = Ember.observer;
 
 export default Ember.Component.extend({
   attributeBindings: ['style'],

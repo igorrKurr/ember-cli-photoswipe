@@ -24,15 +24,7 @@ test('it renders the photoswipe template', function(assert) {
   var component = this.subject();
   var photoswipe = component.$('.pswp');
 
-  assert.equal(photoswipe[0], component.get('pswpEl'));
-});
-
-test('the gallery attribute should be empty on insert.', function(assert) {
-  assert.expect(1);
-  this.render();
-  var component = this.subject();
-
-  assert.equal(component.get('gallery'), undefined, 'should not be set yet.');
+  assert.ok(photoswipe[0]);
 });
 
 test('the gallery attribute should be set when you pass items', function(assert) {

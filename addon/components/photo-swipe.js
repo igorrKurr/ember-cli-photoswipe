@@ -1,27 +1,28 @@
 /* global PhotoSwipe */
 /* global PhotoSwipeUI_Default */
 
-import Em from 'ember';
+import Ember from 'ember';
 
-const run = Em.run;
+const run = Ember.run;
 const computed = Ember.computed;
-const $ = Ember.$;
 const on = Ember.on;
 const RSVP = Ember.RSVP;
-const observer = Ember.observer;
+const isEmpty = Ember.isEmpty;
+const isPresent = Ember.isEmpty;
+const merge = Ember.merge;
 
-export default Em.Component.extend({
+export default Ember.Component.extend({
   items: [],
   withoutThumbs: false,
   isDisplayThumbs: computed.not('withoutThumbs'),
 
-  onInsert: Em.on('didInsertElement', function() {
+  onInsert: on('didInsertElement', function() {
     var _this = this; 
-    if (this.get('content') && !Ember.isEmpty(this.get('content'))) {
+    if (this.get('content') && !isEmpty(this.get('content'))) {
        return this._initItemGallery(this.get('content'));
     }
     else {
-      Em.RSVP.all(this.get('items')).then(function(items){
+      RSVP.all(this.get('items')).then(function(items){
         _this._initItemGallery(items); 
       });
     }
@@ -32,11 +33,11 @@ export default Em.Component.extend({
       history: false
     };
 
-    if (Em.isPresent(getThumbBoundsFn)) {
+    if (isPresent(getThumbBoundsFn)) {
       reqOpts.getThumbBoundsFn = getThumbBoundsFn;
     }
 
-    var options = Em.merge(reqOpts, this.get('options') || {});
+    var options = merge(reqOpts, this.get('options') || {});
     return options;
   },
 
