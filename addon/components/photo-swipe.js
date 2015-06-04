@@ -11,12 +11,12 @@ const isEmpty = Ember.isEmpty;
 const isPresent = Ember.isEmpty;
 const merge = Ember.merge;
 
-export default Ember.Component.extend({
+export default Ember.Component.extend(Ember.Evented, {
   items: [],
   withoutThumbs: false,
   isDisplayThumbs: computed.not('withoutThumbs'),
 
-  onInsert: on('didInsertElement', function() {
+  observerComponentInDom: Ember.on('insertInDOM', function() { 
     var _this = this; 
     if (this.get('content') && !isEmpty(this.get('content'))) {
        return this._initItemGallery(this.get('content'));
@@ -26,6 +26,10 @@ export default Ember.Component.extend({
         _this._initItemGallery(items); 
       });
     }
+  }),
+
+  onInsert: on('didInsertElement', function() {
+    this.trigger('insertInDOM');
   }),
 
   _buildOptions: function(getThumbBoundsFn) {
