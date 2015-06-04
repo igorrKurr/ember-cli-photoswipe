@@ -1,1 +1,5 @@
-{{yield}}
+{{#if layout}}
+  <img src={{src}} alt={{alt}} />
+{{else}}
+  {{yield}}
+{{/if}}

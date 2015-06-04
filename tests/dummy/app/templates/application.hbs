@@ -1,9 +1,10 @@
 <h2 id="title">Photoswipe Examples</h2>
 
 <!-- example 1 -->
-<button class="btn" {{action 'initGallery'}}>Open PhotoSwipe</button>
 
-{{photo-swipe gallery=myGallery options=psOpts content=items}}
+{{#photo-swipe tagName='button' options=psOpts content=items withoutThumbs=true}}
+  Open Gallery
+{{/photo-swipe}}
 
 <br>
 
@@ -12,8 +13,6 @@
 
 {{#photo-swipe options=psTwoOpts as |gallery|}}
   {{#each model as |img index|}}
-    {{#photoswipe-item src=img.href title=img.alt gallery=gallery number=index action='toggleImage'}}
-      <img class="thumb" src={{img.href}} alt={{img.alt}}>
-    {{/photoswipe-item}}
+    {{photoswipe-item class='thumb' src=img.href title=img.alt gallery=gallery number=index action='toggleImage'}}
   {{/each}}
 {{/photo-swipe}}

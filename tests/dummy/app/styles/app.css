@@ -3,5 +3,9 @@ html, body {
 }
 
 .thumb {
+  display: inline-block;
+}
+
+.thumb img {
   height: 150px;
 }

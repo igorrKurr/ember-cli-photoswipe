@@ -20,16 +20,6 @@ export default Ember.Controller.extend({
     }
   ],
 
-  // actions
-  actions: {
-    initGallery: function() {
-      this.get('myGallery').init();
-    },
-    toggleImage: function(number) {
-      console.log("CNCNNCCNNCN", number)
-    }
-  },
-
   psTwoOpts: {
     hideShare: true
   }
