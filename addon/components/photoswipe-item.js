@@ -41,6 +41,6 @@ export default Ember.Component.extend({
 
   click: function(e) {
     e.preventDefault();
-    this.get('gallery').send(this.get('action'), this.get('number'));
+    this.get('gallery').send('toggleImage', this.get('number'));
   }
 });

@@ -7,63 +7,54 @@ const run = Ember.run;
 const computed = Ember.computed;
 const on = Ember.on;
 const RSVP = Ember.RSVP;
-const isPresent = Ember.isEmpty;
 const merge = Ember.merge;
 
 export default Ember.Component.extend(Ember.Evented, {
   items: null,
   withoutThumbs: false,
   isDisplayThumbs: computed.not('withoutThumbs'),
+
   initRunner: on('init', function() {
     this.set('items', []);
   }),
 
-  observerComponentInDom: Ember.on('insertInDOM', function() { 
-    var _this = this; 
-    // if (this.get('content') && !isEmpty(this.get('content'))) {
-    //    return this._initItemGallery(this.get('content'));
-    // }
-    // else {
-      RSVP.all(this.get('items')).then(function(items){
-        _this._initItemGallery(items); 
-      });
-    // }
+  observerComponentInDom: Ember.on('insertInDOM', function() {
+    this._initItemGallery();
   }),
 
   onInsert: on('didInsertElement', function() {
     this.trigger('insertInDOM');
   }),
 
-  _buildOptions: function(getThumbBoundsFn) {
-     var reqOpts = {
+  _buildOptions: function() {
+    var reqOpts = {
       history: false
     };
-
-    if (isPresent(getThumbBoundsFn)) {
-      reqOpts.getThumbBoundsFn = getThumbBoundsFn;
-    }
 
     var options = merge(reqOpts, this.get('options') || {});
     return options;
   },
 
-  _initItemGallery: function(items) {
+  _initItemGallery: function() {
     let pswpEl = this.$('.pswp')[0];
     let pswpTheme = PhotoSwipeUI_Default;
-    this.set('gallery', new PhotoSwipe(
-      pswpEl,
-      pswpTheme,
-      items,
-      this._buildOptions()
-    ));
-    this._reInitOnClose(items);
+    var _this = this;
+    RSVP.all(this.get('items')).then(function(items) {
+      _this.set('gallery', new PhotoSwipe(
+        pswpEl,
+        pswpTheme,
+        items,
+        _this._buildOptions()
+      ));
+      _this._reInitOnClose();
+    });
   },
 
-  _reInitOnClose: function(items) {
+  _reInitOnClose: function() {
     var component = this;
     this.get('gallery').listen('close', function() {
       run.next(function() {
-        component._initItemGallery(items);
+        component._initItemGallery();
       });
     });
   },
@@ -83,12 +74,5 @@ export default Ember.Component.extend(Ember.Evented, {
     open: function() {
       this.get('gallery').init();
     },
-  },
-
-  _getBounds: function(i) {
-    var img      = this.$('img').get(i),
-        position = this.$(img).position(),
-        width    = this.$(img).width();
-    return {x: position.left, y: position.top, w: width};
   },
 });
