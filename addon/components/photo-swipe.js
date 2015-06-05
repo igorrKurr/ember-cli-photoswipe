@@ -7,25 +7,27 @@ const run = Ember.run;
 const computed = Ember.computed;
 const on = Ember.on;
 const RSVP = Ember.RSVP;
-const isEmpty = Ember.isEmpty;
 const isPresent = Ember.isEmpty;
 const merge = Ember.merge;
 
 export default Ember.Component.extend(Ember.Evented, {
-  items: [],
+  items: null,
   withoutThumbs: false,
   isDisplayThumbs: computed.not('withoutThumbs'),
+  initRunner: on('init', function() {
+    this.set('items', []);
+  }),
 
   observerComponentInDom: Ember.on('insertInDOM', function() { 
     var _this = this; 
-    if (this.get('content') && !isEmpty(this.get('content'))) {
-       return this._initItemGallery(this.get('content'));
-    }
-    else {
+    // if (this.get('content') && !isEmpty(this.get('content'))) {
+    //    return this._initItemGallery(this.get('content'));
+    // }
+    // else {
       RSVP.all(this.get('items')).then(function(items){
         _this._initItemGallery(items); 
       });
-    }
+    // }
   }),
 
   onInsert: on('didInsertElement', function() {
