@@ -20,7 +20,7 @@ export default Ember.Component.extend({
     return this.get('_style').htmlSafe();
   }),
 
-  setup: on('init', Ember.observer('gallery', 'src', function() {
+  setup: on('didInsertElement', function() {
     if(this.get('gallery') && this.get('src')) {
       let _this = this;
       let tmpImg = new Image();
@@ -37,7 +37,7 @@ export default Ember.Component.extend({
       });
       this.get('gallery.items').push(promise);
     }
-  })),
+  }),
 
   click: function(e) {
     e.preventDefault();
